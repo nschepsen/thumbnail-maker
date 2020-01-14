@@ -16,11 +16,7 @@ Attention: Don't forget to install these additional apps
 
 ## USAGE ##
 
-python3 TRCreate.py [-i infile] [OPTIONS], where options are
-
-* -i, --input
-
-set the path to the file you want to pass to Thumbnail!MAKER
+python3 TRCreate.py -i infile [OPTIONS], where options are
 
 * -q, --quality
 
@@ -47,6 +43,10 @@ add a comment to the thumbnail annotation
 set the number of cols&rows, the dimension
 
 ## CHANGELOG ##
+
+### Thumbnail!MAKER 0.1.1, updated @ 2020-01-14 ###
+
+* Added Support for Embed Subtitles
 
 ### Thumbnail!MAKER 0.1.0, updated @ 2020-01-13 ###
 
