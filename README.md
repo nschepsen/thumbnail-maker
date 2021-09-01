@@ -5,7 +5,7 @@
 
 ## DESCRIPTION ##
 
-**T**humbnail!**M**AKER helps you create your own video thumbnails
+**T**humbnail!**M**AKER creates customisable thumbnails and adds some tech details in the picture's header
 
 ## DEPENDENCIES ##
 
@@ -16,7 +16,7 @@ Attention: Don't forget to install these additional apps
 
 ## USAGE ##
 
-python3 TRCreate.py -i infile [OPTIONS], where options are
+python3 Thumbnail.py -i infile [OPTIONS], where options are
 
 * -q, --quality
 
@@ -46,7 +46,7 @@ set the number of cols&rows, the dimension
 
 ### Thumbnail!MAKER 0.1.1, updated @ 2020-01-14 ###
 
-* Added Support for Embed Subtitles
+* Add Support for embedded Subtitles
 
 ### Thumbnail!MAKER 0.1.0, updated @ 2020-01-13 ###
 

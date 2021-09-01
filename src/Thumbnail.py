@@ -30,10 +30,12 @@ def next(element: str, arr: list, callback = lambda x: x):
 def humanreadable(value: int) -> str:
 
     for unit in ['bytes', 'KiB', 'MiB', 'GiB', 'TiB']:
+
         if value < 1024:
             return f'{value:0.1f} {unit}'
         value = truediv(value, 1024)
-    return f'{value:0.1f} PiB' # pebibyte 1024^5 = 1125899906842624 bytes
+
+    return f'{value:0.1f} PiB' # pebibyte 1024^5 = 1,125,899,906,842,624 bytes
 
 gcd = lambda a, b: a if b == 0 else not a % b and b or gcd(b, a % b)
 
