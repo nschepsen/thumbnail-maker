@@ -16,38 +16,71 @@ Attention: Don't forget to install these additional apps
 
 ## USAGE ##
 
-python3 Thumbnail.py -i infile [OPTIONS], where options are
+USAGE: tnmake [-h] -i path [-o filename] [-q percentage] [-w px] [-c annotation] [-g layout] [-e {bmp,jpg,png}] [-f path] [-v] [-V]
 
-* -q, --quality
+*  -h, --help
 
-set the output image quality (recommended: 75)
+ show this help message and exit
 
-* -o, --output
+*  -i path, --input path
 
-set the output filename
+set video file's path
 
-* -h, --help
+*  -o filename, --output filename
 
-show this help message and exit
+set custom output filename
 
-* -w, --width
+*  -q percentage, --quality percentage
 
-set the width of the output image
+set output image quality (default: 100)
 
-* -c, --comment
+*  -w px, --width px
 
-add a comment to the thumbnail annotation
+set width of output image
 
-* -d, --dimension
+*  -c annotation, --comment annotation
 
-set the number of cols&rows, the dimension
+add a comment as a thumbnail annotation
+
+*  -g layout, --grid layout
+
+set layout of a resulting thumbnail
+
+*  -e {bmp,jpg,png}, --extension {bmp,jpg,png}
+
+choose the output extension (default: "jpg")
+
+*  -f path, --font path
+
+set path to a fontfile (default: "Mono Input Condensed (Light, Italic)")
+
+*  -v, --verbose
+
+enable verbose mode
+
+*  -V, --version
+
+show program's version number and exit
+
+
+### EXAMPLES ###
+
+```
+tnmake -i "~/Filme/Edgar Wallace (1962) Die Tür mit den sieben Schlössern.mp4" -w 720 -c "Thumbnail\!MAKER creates customisable thumbnails and adds some tech details"
+```
+
+!["Die Tür mit den sieben Schlössern" by Version 0.2.0](images/Edgar Wallace (1962) Die Tür mit den sieben Schlössern.jpg)
 
 ## CHANGELOG ##
 
+### Thumbnail!MAKER 0.2.0, updated @ 2022-11-03 ###
+
+* add a `pip` installable package
+
 ### Thumbnail!MAKER 0.1.1, updated @ 2020-01-14 ###
 
-* Add Support for embedded Subtitles
+* add support for `embedded` subtitles
 
 ### Thumbnail!MAKER 0.1.0, updated @ 2020-01-13 ###
 
-* Initial Release
+* initial release
