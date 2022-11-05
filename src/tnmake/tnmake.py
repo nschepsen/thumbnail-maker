@@ -52,7 +52,7 @@ class Thumbnail:
             'comment': options.get('comment').strip(),
             'extension': options.get('ext', 'jpg'),
             'font': options.get('font') if isfile(str(options.get('font', 'd'))) else join(self.fpath, 'InputMonoCondensedLightItalic.ttf'),
-            'fontsize': 14,
+            'fontsize': 13,
             'grid': options.get('layout', f'3x8'),
             'quality': options.get('quality', 100),
             'tfont': join(self.fpath, 'ColaborateLight.otf'),
@@ -158,41 +158,45 @@ class Thumbnail:
                 framelist[-1]])
         # concate screenshots to a pre-defined grid layout
         call(['montage', '-tile', self.options.get('grid'), '-geometry', '+2+2', *framelist, thumbnail])
-        # adjust the thumbnail width to a value you prefere #
+        # adjust the thumbnail width to a value you prefere
         call(['mogrify', '-resize', str(self.options.get('width')), thumbnail])
         # create an annotation containing tech information
+        n, st_string = len(streams[StreamType.SubTitle]), 'Not Present'
+        if n:
+            st_string = ', '.join(streams[StreamType.SubTitle][:3]) + (f' and {n - 3} more' if n > 3 else '')
         annotation = (
             f'Filename: {filename}.{ext}\n'
             f'{chr(10).join([i for j in streams[:2] for i in j])}\n' # video & audio streams
             f'Duration: {str(timedelta(seconds=duration)).zfill(8)}, ' # hh:mm:ss
-            f'Size: {filesize:,} Bytes ({hrunits(filesize)}), '
-          # f'SubTitles: {", ".join(streams[StreamType.SubTitle][:3]) if True else False:.80}'
-            f'SubTitles: {", ".join(streams[StreamType.SubTitle][:3]) + ((" and " + str(len(streams[2])-3)+" more") if len(streams[2])>3 else "") if len(streams[2]) else "" or "Not Present"}'
+            f'Size: {filesize:,} Bytes ({hrunits(filesize)})'
+            f'{chr(10) if len(streams[StreamType.SubTitle]) > 2 else ", "}'
+            f'SubTitles: {st_string}'
             f'{chr(10) + "Comment: " + self.options.get("comment") if self.options.get("comment") else ""}')
-        # render annotation string to an image
+        # render annotation string ('annotation.bmp')
         call(['convert',
             '-font', self.options.get('font'),
             '-density', '288',
             '-resize', '25%',
-            '-pointsize', str(self.options.get('fontsize')), f'label:{annotation}', 'annotation.bmp'])
+            '-pointsize', str(self.options.get('fontsize')),
+            f'label:{annotation}',
+            'annotation.bmp']) # create annotation
         # calculate height of annotation.bmp plus padding
-        height = int(check_output([
-            'identify',
+        height = int(check_output(['identify',
             '-ping',
             '-format', '%h',
             'annotation.bmp'])) + 10
-        # concate annotation and thumbnail to one image file
+        # concatenate annotation and thumbnail to one image file
         call(['convert',
             thumbnail,
             '-quality', str(self.options.get('quality')),
             '-splice', f'0x{height}',
-            '-draw', 'image over 5,5 0,0 annotation.bmp', f'{thumbnail[:-3]}{self.options.get("extension")}'])
+            '-draw', 'image over 5,5 0,0 annotation.bmp',
+            f'{thumbnail[:-3]}{self.options.get("extension")}'])
 # CLR # -----------------------------------------------------------------------
+        remove(join(getcwd(), 'annotation.bmp'))
         for i in framelist:
             remove(i)
-        if self.options.get('extension') != 'bmp':
-            remove(thumbnail)
-        remove(join(getcwd(), 'annotation.bmp'))
+        if self.options.get('extension') != 'bmp': remove(thumbnail)
 # --- # -----------------------------------------------------------------------
 
 # Thumbnail!MAKER creates customisable thumbnails and adds some tech details in the picture's header

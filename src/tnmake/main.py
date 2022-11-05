@@ -32,7 +32,7 @@ def main():
     parser.add_argument(
         '-i', '--input',
         required=True, # pass a filepath
-        help=f'set video file\'s path ',
+        help=f'set video file path ',
         metavar='path',
         type=apt_path_exists) # movie
     parser.add_argument(

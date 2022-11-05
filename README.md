@@ -14,9 +14,13 @@ Attention: Don't forget to install these additional apps
 * ffmpeg
 * imagemagick
 
+```
+pip install -r requirements.txt
+```
+
 ## USAGE ##
 
-USAGE: tnmake [-h] -i path [-o filename] [-q percentage] [-w px] [-c annotation] [-g layout] [-e {bmp,jpg,png}] [-f path] [-v] [-V]
+tnmake [-h] -i path [-o filename] [-q percentage] [-w px] [-c annotation] [-g layout] [-e {bmp,jpg,png}] [-f path] [-v] [-V]
 
 *  -h, --help
 
@@ -24,7 +28,7 @@ USAGE: tnmake [-h] -i path [-o filename] [-q percentage] [-w px] [-c annotation]
 
 *  -i path, --input path
 
-set video file's path
+set video file path
 
 *  -o filename, --output filename
 
@@ -66,10 +70,27 @@ show program's version number and exit
 ### EXAMPLES ###
 
 ```
-tnmake -i "~/Filme/Edgar Wallace (1962) Die Tür mit den sieben Schlössern.mp4" -w 720 -c "Thumbnail\!MAKER creates customisable thumbnails and adds some tech details"
+tnmake -i "Blade Runner (1982) Original.mkv" -w 750 -c "This is useful for adding small annotations (such as text labels)"
 ```
 
-!["Die Tür mit den sieben Schlössern" by Version 0.2.0](images/Edgar Wallace (1962) Die Tür mit den sieben Schlössern.jpg)
+<details>
+<summary>Example 1: Edgar Wallace (1964) Der Hexer</summary>
+
+![Edgar Wallace (1964) Der Hexer](images/v0.2.0-example.0.jpg)
+</details>
+
+<details>
+<summary>Example 2: Babylon 5 (S01E01)</summary>
+
+![Babylon 5 (S01E01)](images/v0.2.0-example.1.jpg)
+</details>
+
+<details>
+<summary>Example 3: Blade Runner (1982) Original</summary>
+
+![Blade Runner (1982) Original](images/v0.2.0-example.2.jpg)
+
+</details>
 
 ## CHANGELOG ##
 
