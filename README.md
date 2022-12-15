@@ -20,51 +20,58 @@ pip install -r requirements.txt
 
 ## USAGE ##
 
-tnmake [-h] -i path [-o filename] [-q percentage] [-w px] [-c annotation] [-g layout] [-e {bmp,jpg,png}] [-f path] [-v] [-V]
+usage: tnmake -i path [-o path] [-w px] [-c annotation] [--grid layout] [-e {bmp,jpg,png}] [-q x] [-f path] [-s px]
 
-*  -h, --help
+Thumbnail!MAKER creates thumbnails with some additional information
 
- show this help message and exit
+options:
+  -h, --help
 
-*  -i path, --input path
+  * show this help message and exit
 
-set video file path
+  -i path, --input path
 
-*  -o filename, --output filename
+  * set video filepath
 
-set custom output filename
+  -o path, --output path
 
-*  -q percentage, --quality percentage
+  * force a custom output filepath
 
-set output image quality (default: 100)
+  -w px, --width px
 
-*  -w px, --width px
+  * set width of the output image
 
-set width of output image
+  --comment annotation
 
-*  -c annotation, --comment annotation
+  * append a thumbnail annotation
 
-add a comment as a thumbnail annotation
+  --grid layout
 
-*  -g layout, --grid layout
+  * set layout of the output thumbnail
 
-set layout of a resulting thumbnail
+  -e {bmp,jpg,png}, --extension {bmp,jpg,png}
 
-*  -e {bmp,jpg,png}, --extension {bmp,jpg,png}
+  * choose the output extension (default: "jpg")
 
-choose the output extension (default: "jpg")
+  -q x, --quality x
 
-*  -f path, --font path
+  * set quality, affects lossy image formats only
 
-set path to a fontfile (default: "Mono Input Condensed (Light, Italic)")
+  -f path, --font path
 
-*  -v, --verbose
+  * select an available font or pass a path to a desired fontfile
 
-enable verbose mode
+  -s px, --size px
 
-*  -V, --version
+  * set desired fontsize (default: 13px)
 
-show program's version number and exit
+  -v, --verbose
+
+  * enable verbose mode
+
+  -V, --version
+
+  * show program's version number and exit
 
 
 ### EXAMPLES ###
@@ -73,30 +80,11 @@ show program's version number and exit
 tnmake -i "Blade Runner (1982) Original.mkv" -w 750 -c "This is useful for adding small annotations (such as text labels)"
 ```
 
-<details>
-<summary>Example 1: Edgar Wallace (1964) Der Hexer</summary>
-
-![Edgar Wallace (1964) Der Hexer](images/v0.2.0-example.0.jpg)
-</details>
-
-<details>
-<summary>Example 2: Babylon 5 (S01E01)</summary>
-
-![Babylon 5 (S01E01)](images/v0.2.0-example.1.jpg)
-</details>
-
-<details>
-<summary>Example 3: Blade Runner (1982) Original</summary>
-
-![Blade Runner (1982) Original](images/v0.2.0-example.2.jpg)
-
-</details>
-
 ## CHANGELOG ##
 
 ### Thumbnail!MAKER 0.2.0, updated @ 2022-11-03 ###
 
-* add a `pip` installable package
+* pack the project into a `pip` package ([visit](https://pypi.org/project/tnmake/))
 
 ### Thumbnail!MAKER 0.1.1, updated @ 2020-01-14 ###
 

@@ -51,21 +51,19 @@ class Thumbnail:
         self.options = {
             'comment': options.get('comment').strip(),
             'extension': options.get('ext', 'jpg'),
-            'font': options.get('font') if isfile(str(options.get('font', 'd'))) else join(self.fpath, 'InputMonoCondensedLightItalic.ttf'),
-            'fontsize': 13,
+            'font': options.get('font') or '', # default system font
+            'fontsize': options.get('size') or 13,
             'grid': options.get('layout', f'3x8'),
             'quality': options.get('quality', 100),
-            'tfont': join(self.fpath, 'ColaborateLight.otf'),
+            # 'tfont': join(self.fpath, 'ColabLig.otf'), # Personal Use Only
             'width': options.get('width', 1150)
             }
 # DBG # -----------------------------------------------------------------------
-        for k, v in self.options.items():
-            # dump it
-            logger.debug(
-                f'"{k}": {v if k not in ["font", "tfont"] else v.split(chr(47))[-1]}')
+        for k, v in self.options.items(): # dump options
+            logger.debug(f'"{k}": {v}') # for debug purposes
 # --- # -----------------------------------------------------------------------
 
-    def perform(self, video: str, output=None):
+    def perform(self, video: str, output = None):
 
         filename, ext = (lambda t: (t[0], t[1][1:]))(splitext(basename(video)))
         metadata = loads(
@@ -102,6 +100,7 @@ class Thumbnail:
                 bitrate = str(floordiv(int(bitrate), 1000))
             # handle video codec type specific tags
             if stream['codec_type'] == 'video':
+                self.options['pointsize'] = truediv(stream['height'], 4.4)
             # try to get video resolution
                 resolution = f'{stream["width"]}x{stream["height"]}'
             # try to get display aspect ratio, e.g. 16:9
@@ -131,11 +130,13 @@ class Thumbnail:
         for s in streams[:-1]:
             for x in s:
                 logger.debug(f'"{x}"')
-        logger.debug(f'"SubTitles: {", ".join(streams[2])}"')
+        logger.debug(f'"Subtitles: {", ".join(streams[2]) or "Not Present"}"')
 # --- # -----------------------------------------------------------------------
     # PART 2: Snapshot Taking
         shots = (lambda x: x[0]*x[1])(list(map(int, self.options['grid'].split('x'))))
         framelist = []
+        if not output or output.endswith(chr(47)):
+            output = f'{output or ""}{filename}'
         thumbnail = join(getcwd(), f'{output or filename}.bmp')
         for i in range(shots):
             step = floordiv(duration, shots)
@@ -145,37 +146,37 @@ class Thumbnail:
             # append a frame id to the frame list
             framelist.append(join(getcwd(), f'frame{frame:06d}.bmp'))
             call(['ffmpeg', '-ss', str(frame), '-v', 'error', '-i', video, '-vframes', '1', framelist[-1], '-y'])
-            call(['convert',
-                framelist[-1],
-                '-font', self.options.get('tfont'),
-              # '-undercolor', 'white',
-                '-pointsize', '200',
+            call(['convert', framelist[-1],
+                # '-undercolor', 'white',
+                '-pointsize', f'{self.options["pointsize"]:.0f}',
                 '-gravity', 'South',
-                '-stroke', 'rgba(0,0,0,0.50)',
-              # '-strokewidth', '1',
+                '-stroke', 'rgba(0,0,0,0.750)',
+                # '-strokewidth', '1',
                 '-fill', 'rgba(255,255,255,0.20)',
                 '-annotate', '+0+30', f'{str(timedelta(seconds=frame)).zfill(8)}',
                 framelist[-1]])
         # concate screenshots to a pre-defined grid layout
-        call(['montage', '-tile', self.options.get('grid'), '-geometry', '+2+2', *framelist, thumbnail])
+        call(['montage', '-tile', self.options.get('grid'), '-geometry', '+3+3', *framelist, thumbnail])
         # adjust the thumbnail width to a value you prefere
         call(['mogrify', '-resize', str(self.options.get('width')), thumbnail])
         # create an annotation containing tech information
         n, st_string = len(streams[StreamType.SubTitle]), 'Not Present'
         if n:
-            st_string = ', '.join(streams[StreamType.SubTitle][:3]) + (f' and {n - 3} more' if n > 3 else '')
+            st_string = ', '.join(streams[2][:3]) + (f' and {n - 3} more' if n > 3 else '')
         annotation = (
             f'Filename: {filename}.{ext}\n'
             f'{chr(10).join([i for j in streams[:2] for i in j])}\n' # video & audio streams
             f'Duration: {str(timedelta(seconds=duration)).zfill(8)}, ' # hh:mm:ss
             f'Size: {filesize:,} Bytes ({hrunits(filesize)})'
             f'{chr(10) if len(streams[StreamType.SubTitle]) > 2 else ", "}'
-            f'SubTitles: {st_string}'
+            f'Subtitles: {st_string}'
             f'{chr(10) + "Comment: " + self.options.get("comment") if self.options.get("comment") else ""}')
         # render annotation string ('annotation.bmp')
-        call(['convert',
-            '-font', self.options.get('font'),
-            '-density', '288',
+        convert = ['convert']
+        if self.options.get('font'):
+            convert.extend(['-font', self.options.get('font')])
+        call([*convert,
+            '-density', '300', # 288
             '-resize', '25%',
             '-pointsize', str(self.options.get('fontsize')),
             f'label:{annotation}',

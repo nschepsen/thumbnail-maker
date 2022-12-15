@@ -27,68 +27,74 @@ def main():
     Here is the ENTRYPOINT for `pip` and `standalone` versions
     '''
 
-    parser = ArgumentParser(description=f'{__project__} creates customisable thumbnails with some additional information')
+    parser = ArgumentParser(description = f'{__project__} creates thumbnails with some additional information')
     # add cli arguments
     parser.add_argument(
         '-i', '--input',
-        required=True, # pass a filepath
-        help=f'set video file path ',
-        metavar='path',
-        type=apt_path_exists) # movie
+        required = True,
+        help = f'set video filepath',
+        metavar = 'path',
+        type = apt_path_exists)
     parser.add_argument(
         '-o', '--output',
-        help='set custom output filename',
-        metavar='filename')
+        help = 'force a custom output filepath',
+        metavar = 'path')
         # type=abspath,
-        # default=getcwd()) # use a current working directory as default
-    parser.add_argument(
-        '-q', '--quality',
-        type=int,
-        help='set output image quality (default: 100)',
-        metavar='percentage',
-        default=100) # quality gets over the space usage
+        # default=getcwd()) # use the current working directory as default
     parser.add_argument(
         '-w', '--width',
-        type=int,
-        help='set width of output image',
-        metavar='px',
-        default=1150)
+        type = int,
+        help = 'set width of the output image',
+        metavar = 'px',
+        default = 1150)
     parser.add_argument(
-        '-c', '--comment',
-        type=str,
-        help='add a comment as a thumbnail annotation',
-        metavar='annotation',
-        default='') # let it empty if you won't left any commments
+        '--comment',
+        type = str,
+        help = 'append a thumbnail annotation',
+        metavar = 'annotation',
+        default = '') # let it empty if you won't append any commment
     parser.add_argument(
-        '-g', '--grid',
-        type=str,
-        help='set layout of a resulting thumbnail',
-        metavar='layout',
-        default='3x8') # predefined layout consists of 3 cols & 8 rows
+        '--grid',
+        type = str,
+        help = 'set layout of the output thumbnail',
+        metavar = 'layout',
+        default = '3x8') # predefined layout consists of 3 cols & 8 rows
     parser.add_argument(
         '-e', '--extension',
-        help='choose the output extension (default: "jpg")',
-        choices=['bmp', 'jpg', 'png'],
-        default='jpg')
+        help = 'choose the output extension (default: "jpg")',
+        choices = ['bmp', 'jpg', 'png'],
+        default = 'jpg')
+    parser.add_argument(
+        '-q', '--quality',
+        type = int,
+        help = 'set quality, affects lossy image formats only',
+        metavar = 'x',
+        default = 100) # quality gets over the space usage
     parser.add_argument(
         '-f', '--font',
-        type=str,
-        help='set path to a fontfile (default: "Mono Input Condensed (Light, Italic)")',
-        metavar='path')
+        type = str,
+        help = 'select an available font or pass a path to a desired fontfile',
+        metavar = 'path')
+    parser.add_argument(
+        '-s', '--size',
+        type = int,
+        help = 'set desired fontsize (default: 13px)',
+        metavar = 'px')
     parser.add_argument(
         '-v', '--verbose',
-        action='store_true',
-        default=False,
-        help='enable verbose mode')
+        action = 'store_true',
+        default = False,
+        help = 'enable verbose mode')
     parser.add_argument(
         '-V', '--version',
-        action='version',
-        version=f'{__project__} v{__version__}')
+        action = 'version',
+        version = f'{__project__} v{__version__}')
     args = parser.parse_args() # evaluate all arguments and pass 'em through
     if args.verbose:
         logger.setLevel(10)
     options = {
         'font': args.font, # set defaults in class itself
+        'size': args.size,
         'layout': args.grid, # 3x8
         'comment': args.comment,
         'ext': args.extension,
